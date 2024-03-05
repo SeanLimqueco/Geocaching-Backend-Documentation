@@ -19,7 +19,7 @@ completed_caches = db.Table('completed_caches',
 # The above is a link to a no longer available data table
 class User(db.Model):
   '''
-  Generates a table for new Users
+  Generates a table for new Users and their required fields.
 
   @param db.Model — Generates a new table, requiring "__tablename__" and a "primary_key"
   to be setup in order to prevent it from auto-generating table names.
