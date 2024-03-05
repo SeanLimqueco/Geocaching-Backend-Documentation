@@ -16,28 +16,37 @@ completed_caches = db.Table('completed_caches',
 
 
 # https://hackmd.io/@jpshafto/H1VbmP3yOclass
+# The above is a link to a no longer available data table
 class User(db.Model):
-    __tablename__ = "user"  # connects class definition to the right table
-    id = db.Column(db.Integer, primary_key=True)  # this autoincrements by default
-    username = db.Column(db.String(32), unique=True)
-    score = db.Column(db.Integer, default=0)
-    completed_caches = db.relationship('CacheLocation', secondary=completed_caches, backref="users")
+  '''
+  Generates a table for new Users
 
-    following = db.relationship(
-        "User",
-        secondary=follows,
-        primaryjoin=(follows.c.follower_id == id),
-        secondaryjoin=(follows.c.followed_id == id),
-        backref=db.backref("followed_by", lazy="dynamic"),
-        lazy="dynamic"
-    )
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+  @param db.Model — Generates a new table, requiring "__tablename__" and a "primary_key"
+  to be setup in order to prevent it from auto-generating table names.
+  '''
+  __tablename__ = "user"  # connects class definition to the right table
+  id = db.Column(db.Integer, primary_key=True)  # user instance IDs will increment automatically by default
 
-    def __str__(self):  # return normal format
-        return f"UserData(User: {self.user}, Score: {self.score}, Created: {self.date_created})"
+  # declaring user fields
+  username = db.Column(db.String(32), unique=True)
+  score = db.Column(db.Integer, default=0)
+  completed_caches = db.relationship('CacheLocation', secondary=completed_caches, backref="users")
 
-    def __repr__(self):  # return dict format
-        return str({"user": self.user, "score": {self.score}, "created": {str(self.date_created)}})
+  following = db.relationship(
+      "User",
+      secondary=follows,
+      primaryjoin=(follows.c.follower_id == id),
+      secondaryjoin=(follows.c.followed_id == id),
+      backref=db.backref("followed_by", lazy="dynamic"),
+      lazy="dynamic"
+  )
+  timestamp = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+  def __str__(self):  # return normal format
+      return f"UserData(User: {self.user}, Score: {self.score}, Created: {self.date_created})"
+
+  def __repr__(self):  # return dict format
+      return str({"user": self.user, "score": {self.score}, "created": {str(self.date_created)}})
 
 
 # TIMESTAMP = LAST MODIFIED
