@@ -7,11 +7,14 @@ def create(body):  # this was the error here
     Handles the creation of new Cache locations.
     Checks to see if a Cache Location name has been taken. if not then it will create a
     new cache location based off the given information, otherwise it will throw an error.
+
+    @param body A JSON file containing the newly made cache.
     '''
     existing_cache_location = CacheLocation.query.filter(
         CacheLocation.cachename == body.get('cachename')).one_or_none()
 
     if existing_cache_location is None:
+        # loads the JSON file (body) into python using the SQLAlchemy session attatched to the db
         new_cache_location = cache_location_schema.load(body, session=db.session)
         db.session.add(new_cache_location)
         db.session.commit()
