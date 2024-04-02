@@ -3,6 +3,11 @@ from geocache.models import CacheLocation, cache_location_schema, cache_location
 
 
 def create(body):  # this was the error here
+    '''
+    Handles the creation of new Cache locations.
+    Checks to see if a Cache Location name has been taken. if not then it will create a
+    new cache location based off the given information, otherwise it will throw an error.
+    '''
     existing_cache_location = CacheLocation.query.filter(
         CacheLocation.cachename == body.get('cachename')).one_or_none()
 
