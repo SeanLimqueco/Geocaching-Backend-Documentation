@@ -16,10 +16,16 @@ def create(body):  # this was the error here
     if existing_cache_location is None:
         # loads the JSON file (body) into python using the SQLAlchemy session attatched to the db
         new_cache_location = cache_location_schema.load(body, session=db.session)
+
+        # Add the new_cache_location to the db
         db.session.add(new_cache_location)
         db.session.commit()
+
+        # returns the new_cache_location in the form of a JSON file, confirming this with the
+        # HTTP status code 201 (SUCCESSFUL POST)
         return cache_location_schema.dump(new_cache_location), 201
     else:
+        # Throws an error using HTTP status code 406 (NOT ACCEPTABLE)
         abort(406, f"Cache location with name {body.get('cachename')} already exists")
 
 
