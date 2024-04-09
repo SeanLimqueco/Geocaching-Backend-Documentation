@@ -22,7 +22,7 @@ class User(db.Model):
   Generates a table for new Users and their required fields.
 
   @param db.Model — Generates a new table, requiring "__tablename__" and a "primary_key"
-  to be setup in order to prevent it from auto-generating table names.
+    to be setup in order to prevent it from auto-generating table names.
   '''
   __tablename__ = "user"  # connects class definition to the right table
   id = db.Column(db.Integer, primary_key=True)  # user instance IDs will increment automatically by default
@@ -51,6 +51,21 @@ class User(db.Model):
 
 # TIMESTAMP = LAST MODIFIED
 class CacheLocation(db.Model):
+    '''
+    Creates a skeleton of all the information needed to be stored in new CacheLocations.
+    - id: int
+    - cachename: string
+    - longitude: float
+    - laditude: float
+    - hints: string
+    - trivia: string
+    - difficulty: int
+    - verificationString: string
+    - radius: int
+    - timestamp: DateTime
+    
+    @param db.Model - creates a model class that can be defined with columns and their input types
+    '''
     __tablename__ = "cache_locations"
     id = db.Column(db.Integer, primary_key=True)
     cachename = db.Column(db.String(64))
@@ -71,16 +86,22 @@ class CacheLocation(db.Model):
 
 
 class UserSchema(ma.SQLAlchemyAutoSchema):
+    '''
+    Generates a schema of all the user tables.
+
+    @param ma.SQLAlchemyAutoSchema - generates a template schema to house tables,
+      through marshmellow.
+    '''
     class Meta:
         model = User
-        include_fk = True
-        include_relationships = True
-        load_instance = True
-        sqla_session = db.session
+        include_fk = True              # include all pre-existing foreign keys
+        include_relationships = True   # include all pre-existing relationships 
+        load_instance = True          
+        sqla_session = db.session      # sets the sqla_session to the SQLAlchemy session we have now
 
 
-user_schema = UserSchema()
-users_schema = UserSchema(many=True)
+user_schema = UserSchema()             # generates a schema for an individual user's information
+users_schema = UserSchema(many=True)   # generates a schema to keep track of users
 
 
 class CacheLocationsSchema(ma.SQLAlchemyAutoSchema):
