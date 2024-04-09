@@ -105,13 +105,19 @@ users_schema = UserSchema(many=True)   # generates a schema to keep track of use
 
 
 class CacheLocationsSchema(ma.SQLAlchemyAutoSchema):
+    '''
+    Generates a schema of all the cache location tables.
+
+    @param ma.SQLAlchemyAutoSchema - generates a template schema to house tables,
+      through marshmellow.
+    '''
     class Meta:
         model = CacheLocation
         load_instance = True
-        include_fk = True
-        include_relationships = True
-        sqla_session = db.session
+        include_fk = True              # include all pre-existing foreign keys
+        include_relationships = True   # include all pre-existing relationships 
+        sqla_session = db.session      # sets the sqla_session to the SQLAlchemy session we have now
 
 
-cache_location_schema = CacheLocationsSchema()
-cache_locations_schema = CacheLocationsSchema(many=True)
+cache_location_schema = CacheLocationsSchema()            # generates a scheme for each cache location's information
+cache_locations_schema = CacheLocationsSchema(many=True)  # generates a schema to keep track of cache locations.
