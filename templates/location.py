@@ -55,8 +55,20 @@ def read_one(location_id: int):
 
 
 def update(location_id: int, body):
+    '''
+    Checks to see if a Cache Location exists by pulling its ID.
+    
+    If it does exist then it loads the new Cache Locations with the rest of its original information
+        before merging then commiting it.
+    Otherwise raise an error stating "Cache Location with id ___ not found"
+
+    @param locatoin_id - the ID of the Cache Location
+    @param body - A JSON file containing the newly made cache.
+    '''
     existing_cache_location = CacheLocation.query.filter(CacheLocation.id == location_id).one_or_none()
     if existing_cache_location:
+        # load the information of the new cache location...
+        # TODO: verify what instance=existing_cache_location does before finishing comments
         existing_cache_location = cache_location_schema.load(body, instance=existing_cache_location)
         db.session.merge(existing_cache_location)
         db.session.commit()
@@ -66,6 +78,10 @@ def update(location_id: int, body):
 
 
 def delete(location_id: int):
+    '''
+
+    @param locatoin_id - the ID of the cache location that meant to be deleted
+    '''
     existing_cache_location = CacheLocation.query.filter(CacheLocation.id == location_id).one_or_none()
 
     if existing_cache_location:
